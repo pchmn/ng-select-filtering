@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ng-select-filtering": [
+        "dist/ng-select-filtering"
+      ],
+      "ng-select-filtering/*": [
+        "dist/ng-select-filtering/*"
+      ]
+    }
   }
 }

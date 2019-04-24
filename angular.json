@@ -134,6 +134,41 @@
           }
         }
       }
+    },
+    "ng-select-filtering": {
+      "root": "projects/ng-select-filtering",
+      "sourceRoot": "projects/ng-select-filtering/src",
+      "projectType": "library",
+      "prefix": "ng",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ng-select-filtering/tsconfig.lib.json",
+            "project": "projects/ng-select-filtering/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ng-select-filtering/src/test.ts",
+            "tsConfig": "projects/ng-select-filtering/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-select-filtering/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ng-select-filtering/tsconfig.lib.json",
+              "projects/ng-select-filtering/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ng-select-filtering-demo"
