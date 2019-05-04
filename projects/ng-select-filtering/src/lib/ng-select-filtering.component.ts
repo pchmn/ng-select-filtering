@@ -48,6 +48,32 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
   dropdownMenuWidth: number;
   itemsDivHeight: number;
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyDown($event: KeyboardEvent) {
+    if (KeyCode[$event.key] && this.dropdown.isOpen()) {
+      switch ($event.key) {
+        case KeyCode.ArrowDown:
+          this.hoverNextItem();
+          // Prevent cursor from moving
+          $event.preventDefault();
+          break;
+        case KeyCode.ArrowUp:
+          this.hoverPreviousItem();
+          // Prevent cursor from moving
+          $event.preventDefault();
+          break;
+        case KeyCode.Enter:
+          this.selectHoveredItem();
+          break;
+        case KeyCode.Esc:
+          this.dropdown.close();
+          $event.preventDefault();
+          $event.stopPropagation();
+          break;
+      }
+    }
+  }
+
   constructor(private renderer: Renderer2) {
     super();
   }
@@ -111,6 +137,7 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
         this.itemsDivHeight = this.itemsDivElt.nativeElement.clientHeight;
         // Visible items
         this.adjustDropdownMenuHeight();
+        this.scrollIfNecessary(this.filteredItems.indexOf(this.hoveredItem));
       } else if (!isOpen) {
         // If dropdown is closed, reset filtering
         this.filteredItems = [...this.items];
@@ -139,61 +166,35 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
     this.itemsDivElt.nativeElement.scrollTop = 0;
   }
 
-  @HostListener('keydown', ['$event'])
-  handleKeyDown($event: KeyboardEvent) {
-    if (KeyCode[$event.which]) {
-      switch ($event.which) {
-        case KeyCode.ArrowDown:
-          this.hoverNextItem();
-          // Prevent cursor from moving
-          $event.preventDefault();
-          break;
-        case KeyCode.ArrowUp:
-          this.hoverPreviousItem();
-          // Prevent cursor from moving
-          $event.preventDefault();
-          break;
-        case KeyCode.ArrowLeft:
-          this.hoverFirstItem();
-          break;
-        case KeyCode.ArrowRight:
-          this.hoverLastItem();
-          break;
-        case KeyCode.Enter:
-          this.selectHoveredItem();
-          break;
-        case KeyCode.Esc:
-          this.dropdown.close();
-          $event.preventDefault();
-          $event.stopPropagation();
-          break;
-      }
-    }
-  }
-
   private hoverPreviousItem() {
     const indexOfHoveredItem = this.filteredItems.indexOf(this.hoveredItem);
     if (indexOfHoveredItem > -1) {
+      let previousIndex: number;
       if (indexOfHoveredItem === 0) {
         // If hovered item was the first one of the list, select the last one
-        this.hoveredItem = this.filteredItems[this.filteredItems.length - 1];
+        previousIndex = this.filteredItems.length - 1;
       } else {
         // Else just hover the previous one
-        this.hoveredItem = this.filteredItems[indexOfHoveredItem - 1];
+        previousIndex = indexOfHoveredItem - 1;
       }
+      this.hoveredItem = this.filteredItems[previousIndex];
+      this.scrollIfNecessary(previousIndex);
     }
   }
 
   private hoverNextItem() {
     const indexOfHoveredItem = this.filteredItems.indexOf(this.hoveredItem);
     if (indexOfHoveredItem > -1) {
+      let nextIndex: number;
       if (indexOfHoveredItem === this.filteredItems.length - 1) {
         // If hovered item was the last one of the list, select the first one
-        this.hoveredItem = this.filteredItems[0];
+        nextIndex = 0;
       } else {
         // Else just hover the next one
-        this.hoveredItem = this.filteredItems[indexOfHoveredItem + 1];
+        nextIndex = indexOfHoveredItem + 1;
       }
+      this.hoveredItem = this.filteredItems[nextIndex];
+      this.scrollIfNecessary(nextIndex);
     }
   }
 
@@ -202,14 +203,26 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
     this.itemsDivElt.nativeElement.scrollTo(0, 0);
   }
 
-  private hoverLastItem() {
-    this.hoveredItem = this.filteredItems[this.filteredItems.length - 1];
-    this.itemsDivElt.nativeElement.scrollTo(0, this.itemsDivHeight);
-  }
-
   private selectHoveredItem() {
     if (this.hoveredItem) {
       this.selectItem(this.hoveredItem);
+    }
+  }
+
+  private scrollIfNecessary(indexToHover: number) {
+    // Get positions
+    const itemHoveredElt = this.dropdownMenu.menuItems.toArray()[indexToHover].elementRef.nativeElement;
+    const itemsDivPositionTop = this.itemsDivElt.nativeElement.scrollTop;
+    const itemHoveredPositionTop = itemHoveredElt.offsetTop - this.itemsDivElt.nativeElement.offsetTop;
+    const itemsDivPositionBottom = this.itemsDivElt.nativeElement.clientHeight + itemsDivPositionTop;
+    const itemHoveredPositionBottom = itemHoveredPositionTop + itemHoveredElt.clientHeight;
+
+    if (itemHoveredPositionBottom > itemsDivPositionBottom) {
+      // Item hovered is not visible and we have to scroll down to the bottom of the item (minus height of the container to scroll)
+      this.itemsDivElt.nativeElement.scrollTo(0, itemHoveredPositionBottom - this.itemsDivElt.nativeElement.clientHeight);
+    } else if (itemHoveredPositionTop < itemsDivPositionTop) {
+      // Item hovered is not visible and we have to scroll to the top of the item
+      this.itemsDivElt.nativeElement.scrollTo(0, itemHoveredPositionTop);
     }
   }
 }
