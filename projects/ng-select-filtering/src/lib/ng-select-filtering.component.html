@@ -1,0 +1,47 @@
+<div ngbDropdown (openChange)="onOpenChange($event)" autoClose="outside">
+  <!-- value -->
+  <div ngbDropdownToggle class="form-control ng-select">
+    <!-- placeholder -->
+    <ng-container *ngIf="!valueToDisplay">
+      <input class="ng-placeholder-select" [placeholder]="placeholderSelect" disabled>
+    </ng-container>
+
+    <!-- value -->
+    <ng-container *ngIf="valueToDisplay">
+      <!-- default template -->
+      <ng-template #defaultValueTemplate>
+        {{ valueToDisplay }}
+      </ng-template>
+      <!-- template to show -->
+      <ng-template [ngTemplateOutlet]="valueTemplate || defaultValueTemplate"
+        [ngTemplateOutletContext]="{ value: selectedItem }">
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <!-- dropdown -->
+  <div #dropdownMenu ngbDropdownMenu aria-labelledby="dropdownMenuButton" class="ng-dropdown-menu"
+    [style.max-width.px]="maxWidth" [style.width.px]="dropdownMenuWidth">
+    <!-- filter input -->
+    <div class="ng-filter-input">
+      <input #filterInput type="text" class="form-control ng-filter-input" [placeholder]="placeholderFilter"
+        [ngModel]="filterTerm" (ngModelChange)="onFiltering($event)">
+    </div>
+
+    <!-- items -->
+    <div #itemsDiv class="ng-items">
+      <div *ngFor="let item of filteredItems" ngbDropdownItem (click)="selectItem(item)" class="ng-item"
+        [class.ng-item-selected]="item === selectedItem" [class.ng-item-hovered]="item === hoveredItem"
+        (mouseover)="hoverItem(item)">
+        <!-- default template -->
+        <ng-template #defaultItemTemplate>
+          <a class="ng-item-display">
+            {{ bindLabel ? item[bindLabel] : item }}</a>
+        </ng-template>
+        <!-- template to show -->
+        <ng-template [ngTemplateOutlet]="itemTemplate || defaultItemTemplate"
+          [ngTemplateOutletContext]="{ item: item, filterTerm: filterTerm }"></ng-template>
+      </div>
+    </div>
+  </div>
+</div>

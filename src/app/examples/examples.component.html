@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row">
+    <ng-select-filtering class="col-md-4" placeholderSelect="Select a value..." placeholderFilter="Enter a filter..."
+      [items]="items" bindValue="code" bindLabel="label" [filterBy]="['label']" [(ngModel)]="itemSelected"
+      [maxVisibleItems]="7">
+      <ng-template ngItemTemplate let-item="item">
+        <span>{{ item.label }}</span>
+        <span style="float: right">{{ item.code }}</span>
+      </ng-template>
+
+    </ng-select-filtering>
+    {{itemSelected}}
+  </div>
+</div>
