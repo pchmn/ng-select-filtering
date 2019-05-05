@@ -19,11 +19,11 @@ import { Utils } from './utils/utils';
 export class NgSelectFilteringComponent extends AbstractValueAccessor<any> implements OnChanges {
 
   // Inputs
-  @Input() items: any[];
+  @Input() items: any[] = [];
   @Input() bindValue: string;
   @Input() bindLabel: string;
-  @Input() placeholderSelect: string;
-  @Input() placeholderFilter: string;
+  @Input() placeholderSelect = 'Select a value';
+  @Input() placeholderFilter = 'Enter a filter';
   @Input() filterBy: string[];
   @Input() maxWidth: number;
   @Input() maxVisibleItems = 5;
