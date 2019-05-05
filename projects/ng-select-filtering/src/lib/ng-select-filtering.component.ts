@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, forwardRef, HostListener, Input, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, forwardRef, HostListener, Input, OnChanges, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractValueAccessor } from './utils/abstract-value-accessor';
@@ -16,7 +16,7 @@ import { Utils } from './utils/utils';
     multi: true
   }]
 })
-export class NgSelectFilteringComponent extends AbstractValueAccessor<any> implements OnInit {
+export class NgSelectFilteringComponent extends AbstractValueAccessor<any> implements OnChanges {
 
   // Inputs
   @Input() items: any[];
@@ -65,7 +65,7 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
         case KeyCode.Enter:
           this.selectHoveredItem();
           break;
-        case KeyCode.Esc:
+        case KeyCode.Escape:
           this.dropdown.close();
           $event.preventDefault();
           $event.stopPropagation();
@@ -78,9 +78,12 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
     super();
   }
 
-  ngOnInit() {
-    // Clone of items
-    this.filteredItems = [...this.items];
+  ngOnChanges(changes: SimpleChanges) {
+    // Each time items change, update filteredItems
+    if (changes.items && this.items) {
+      // Clone of items
+      this.filteredItems = [...this.items];
+    }
   }
 
   selectItem(item: any) {

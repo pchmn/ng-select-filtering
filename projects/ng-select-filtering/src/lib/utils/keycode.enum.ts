@@ -1,6 +1,6 @@
 export enum KeyCode {
   Enter = 'Enter',
-  Esc = 'Escape',
+  Escape = 'Escape',
   ArrowUp = 'ArrowUp',
   ArrowDown = 'ArrowDown',
   ArrowLeft = 'ArrowLeft',
