@@ -1,27 +1,111 @@
-# NgSelectFilteringDemo
+# ng-select-filtering
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.7.
+Select with filtering component for Angular with Bootstrap style.
 
-## Development server
+## Demo
+TODO
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Getting started
 
-## Code scaffolding
+### Prerequisites
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+You need Bootstrap in your project because `ng-select-filtering` is based on Boostrap css.
 
-## Build
+#### Import Bootstrap css via npm
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+First install Bootstrap package :
 
-## Running unit tests
+`npm install --save bootstrap`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Then add Bootstrap css in your `angular.json` file :
+```json
+{
+  ...
+  styles: [
+    ...,
+    "node_modules/bootstrap/dist/css/bootstrap.min.css"
+  ]
+  ...
+}
+```
 
-## Running end-to-end tests
+Or directly in your `style.scss` or `style.css` file :
+```css
+@import '~bootstrap/dist/css/bootstrap.min.css';
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+#### Or import Bootstrap css via cdn
+In your `index.html` file (cf [official doc](https://getbootstrap.com/docs/4.3/getting-started/download/#bootstrapcdn)) :
+```html
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+```
 
-## Further help
+### Install `ng-select-filtering`
+`npm install --save ng-select-filtering`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Basic usage
+
+### Import `NgSelectFilteringModule` (and `FormsModule` to use `ngModel`)
+```js
+import { NgSelectFilteringModule } from 'ng-select-filtering';
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [NgSelectFilteringModule, FormsModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule {}
+```
+
+### Use `ng-select-filtering` component
+
+```js
+import {Component} from '@angular/core';
+
+@Component({
+selector: 'app-component',
+template: `
+  <ng-select-filtering
+    [(ngModel)]="citySelected"
+    [items]="cities"
+    bindValue="postCode"
+    bindLabel="city">
+  </ng-select-filtering>
+ `
+})
+export class AppComponent {
+  cities: any[] = [
+    {postCode: '35000', city: 'Rennes'},
+    {postCode: '75000', city: 'Paris'}
+  ];
+  citySelected: any;
+}
+```
+
+## Custom templates
+You can use custom templates for the value selected (which will be displayed in the select button view) or for each item view in the dropdown menu.
+
+### Custom value template
+```html
+<ng-select-filtering [(ngModel)]="citySelected" [items]="cities" bindValue="postCode" bindLabel="city">
+  <ng-template ngValueTemplate let-value="value">
+    <span>{{ value.postCode }} - {{ value.city }}</span>
+  </ng-template>
+</ng-select-filtering>
+```
+`let-value` is the value selected.
+
+### Custom item template
+```html
+<ng-select-filtering [(ngModel)]="citySelected" [items]="cities" bindValue="postCode" bindLabel="city">
+  <ng-template ngItemTemplate let-item="item" let-filterTerm="filterTerm">
+    <span>{{ item.city }}</span>
+    <span style="float: right">{{ item.postCode }}</span>
+  </ng-template>
+</ng-select-filtering>
+```
+`let-item` corresponds to each item of the list.
+
+`let-filterTerm` corresponds to the text entered in the filter input.
