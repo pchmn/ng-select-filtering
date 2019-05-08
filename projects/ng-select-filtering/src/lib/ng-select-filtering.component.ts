@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, forwardRef, HostListener, Input, OnChanges, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnChanges, Output, Renderer2, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractValueAccessor } from './utils/abstract-value-accessor';
@@ -27,9 +27,13 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
   @Input() filterBy: string[];
   @Input() maxWidth: number;
   @Input() maxVisibleItems = 5;
+  // Outputs
+  @Output() openChange = new EventEmitter<boolean>();
+  @Output() valueChange = new EventEmitter<any>();
+  @Output() filter = new EventEmitter<{ filterTerm: string, filteredItems: any[] }>();
   // Items
   filteredItems: any[];
-  filterTerm: string;
+  filterTerm: string = null;
   // Item selected
   valueToDisplay: string;
   selectedItem: any;
@@ -86,11 +90,21 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
     }
   }
 
+  open() {
+    this.dropdown.open();
+  }
+
+  close() {
+    this.dropdown.close();
+  }
+
   selectItem(item: any) {
     // Close the dropdown
     this.dropdown.close();
 
     this.selectedItem = item;
+    // Emit event
+    this.valueChange.emit(this.selectedItem);
     // Bind value
     if (this.bindValue && item.hasOwnProperty(this.bindValue)) {
       this.value = item[this.bindValue];
@@ -111,7 +125,10 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
 
   onFiltering(filter: string) {
     this.filterTerm = filter;
+    // Filter
     this.filteredItems = Utils.filter(this.items, filter, this.filterBy);
+    // Emit event
+    this.filter.emit({ filterTerm: this.filterTerm, filteredItems: this.filteredItems });
     // Hover first item when filtering
     this.hoverFirstItem();
     // Adjust height
@@ -119,6 +136,8 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
   }
 
   onOpenChange(isOpen: boolean) {
+    // Emit event
+    this.openChange.emit(isOpen);
     // Use setTimeout so filterInputElt and itemsDivElt won't be null
     setTimeout(() => {
       if (isOpen && this.filterInputElt && this.itemsDivElt) {
@@ -132,6 +151,8 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
         }
         // Add class focused
         this.renderer.addClass(this.dropdownToggle.getNativeElement(), 'ng-select-focused');
+        // Add class btn-light for styling when opened
+        this.renderer.addClass(this.dropdownToggle.getNativeElement(), 'btn-light');
         // Dropdown menu width
         // So the width stays fix when filtering
         this.dropdownMenuWidth = this.dropdownMenuElt.nativeElement.clientWidth;
@@ -147,6 +168,8 @@ export class NgSelectFilteringComponent extends AbstractValueAccessor<any> imple
         this.filterTerm = null;
         // Remove class focused
         this.renderer.removeClass(this.dropdownToggle.getNativeElement(), 'ng-select-focused');
+        // Remove class btn-light when closed to have input like styling
+        this.renderer.removeClass(this.dropdownToggle.getNativeElement(), 'btn-light');
       }
     });
   }
