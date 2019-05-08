@@ -1,6 +1,23 @@
 {
   "name": "ng-select-filtering",
-  "version": "0.0.1",
+  "version": "1.0.4",
+  "description": "Select with filtering component for Angular using Bootstrap style",
+  "author": "pchmn",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pchmn/ng-select-filtering.git"
+  },
+  "homepage": "https://github.com/pchmn/ng-select-filtering",
+  "keywords": [
+    "angular",
+    "select",
+    "ui-select",
+    "dropdown",
+    "multiselect",
+    "autocomplete",
+    "filtering"
+  ],
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0"

@@ -7,6 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "test-library": "ng test ng-select-filtering",
+    "build-library": "ng build ng-select-filtering && cp ./README.md ./dist/ng-select-filtering/README.md && cp ./LICENSE ./dist/ng-select-filtering/LICENSE",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -20,9 +21,11 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^4.1.2",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
     "ng-boosted": "^4.0.2",
+    "ng-select-filtering": "^1.0.0",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
