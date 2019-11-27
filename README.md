@@ -1,3 +1,5 @@
+[IN DEVELOPMENT - NOT READY TO USE]
+
 # ng-select-filtering
 
 Select with filtering component for Angular using Bootstrap style.
