@@ -9,7 +9,8 @@
     "test-library": "ng test ng-select-filtering",
     "build-library": "ng build ng-select-filtering && cp ./README.md ./dist/ng-select-filtering/README.md && cp ./LICENSE ./dist/ng-select-filtering/LICENSE",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prepare": "npm run build-library"
   },
   "private": true,
   "dependencies": {
