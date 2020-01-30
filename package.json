@@ -1,13 +1,18 @@
 {
   "name": "ng-select-filtering-demo",
   "version": "0.0.0",
+  "files": [
+    "dist/*"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "test-library": "ng test ng-select-filtering",
-    "build-library": "ng build ng-select-filtering && cp ./README.md ./dist/ng-select-filtering/README.md && cp ./LICENSE ./dist/ng-select-filtering/LICENSE",
+    "build-library": "run-script-os",
+    "build-library:darwin:linux": "ng build ng-select-filtering && cp ./README.md ./dist/ng-select-filtering/README.md && cp ./LICENSE ./dist/ng-select-filtering/LICENSE",
+    "build-library:win32": "ng build ng-select-filtering; copy .\\README.md .\\dist\\ng-select-filtering\\README.md; copy .\\LICENSE .\\dist\\ng-select-filtering\\LICENSE",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prepare": "npm run build-library"
@@ -50,6 +55,7 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "ng-packagr": "^5.1.0",
     "protractor": "~5.4.0",
+    "run-script-os": "^1.0.7",
     "ts-node": "~7.0.0",
     "tsickle": ">=0.34.0",
     "tslib": "^1.9.0",
