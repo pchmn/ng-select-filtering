@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectFilteringComponent } from './ng-select-filtering.component';
 import { NgItemTemplateDirective, NgPlaceholderFilterTemplateDirective, NgPlaceholderSelectTemplateDirective, NgValueTemplateDirective } from './utils/directives.directive';
@@ -14,7 +15,8 @@ import { NgItemTemplateDirective, NgPlaceholderFilterTemplateDirective, NgPlaceh
   ],
   imports: [
     CommonModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    FormsModule
   ],
   exports: [
     NgSelectFilteringComponent,
