@@ -12,7 +12,8 @@
     "test-library": "ng test ng-select-filtering",
     "build-library": "run-script-os",
     "build-library:darwin:linux": "ng build ng-select-filtering && cp ./README.md ./dist/ng-select-filtering/README.md && cp ./LICENSE ./dist/ng-select-filtering/LICENSE",
-    "build-library:win32": "ng build ng-select-filtering; copy .\\README.md .\\dist\\ng-select-filtering\\README.md; copy .\\LICENSE .\\dist\\ng-select-filtering\\LICENSE",
+    "build-library:win32": "build-library.bat",
+    "build-library:default": "ng build ng-select-filtering && cp ./README.md ./dist/ng-select-filtering/README.md && cp ./LICENSE ./dist/ng-select-filtering/LICENSE",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prepare": "npm run build-library"
