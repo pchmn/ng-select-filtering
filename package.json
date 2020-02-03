@@ -19,7 +19,7 @@
     "prepare": "npm run build-library"
   },
   "private": true,
-  "dependencies": {
+  "peerDependencies": {
     "@angular/animations": "~7.2.0",
     "@angular/common": "~7.2.0",
     "@angular/compiler": "~7.2.0",
@@ -32,7 +32,6 @@
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
     "ng-boosted": "^4.0.2",
-    "ng-select-filtering": "^1.0.0",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
